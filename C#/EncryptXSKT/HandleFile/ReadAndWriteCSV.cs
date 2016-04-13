@@ -60,10 +60,11 @@ namespace EncryptXSKT.HandleFile
             this.progressBar = progressBar;
             var reader = new StreamReader(File.OpenRead(urlFile));
             StreamWriter sw = new StreamWriter(urlFileMaHoa, true);
-
+            
             List<LotteryPattern> listA = new List<LotteryPattern>();
             StringBuilder str = new StringBuilder();
-            
+            string encodeString;
+            string notesString = ";";
             while (!reader.EndOfStream)
             {
                 var line = reader.ReadLine();
@@ -75,10 +76,11 @@ namespace EncryptXSKT.HandleFile
                     obj.LoaiVe = values[0].ToString();
                     obj.NgaySo = values[1].ToString();
                     obj.So = values[2].ToString();
-                    obj.SoMaHoa = DecryptAndEcryptClass.Encrypt(obj.So, DecryptAndEcryptClass.GetConfigEncrytKey(), DecryptAndEcryptClass.IsHashEncryptDecryptEnable());
+                    encodeString = obj.LoaiVe + notesString + obj.NgaySo + notesString + obj.So;
+                    obj.SoMaHoa = DecryptAndEcryptClass.Encrypt(encodeString, DecryptAndEcryptClass.GetConfigEncrytKey(), DecryptAndEcryptClass.IsHashEncryptDecryptEnable());
                     str.AppendFormat("{0} , {1} , {2} , {3}", obj.LoaiVe, obj.NgaySo, obj.So, obj.SoMaHoa);
                     str.AppendLine();
-
+                    this.progressBar.Invoke(new updatebar(this.UpdateProgress));
                 }
 
             }
