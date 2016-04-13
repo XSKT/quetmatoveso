@@ -74,11 +74,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DataSet1.xsd</DependentUpon>
     </Compile>
-    <Compile Include="Form1.cs">
+    <Compile Include="frmEnCodeFile.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="frmEnCodeFile.Designer.cs">
+      <DependentUpon>frmEnCodeFile.cs</DependentUpon>
     </Compile>
     <Compile Include="frmQRCodeViewer.cs">
       <SubType>Form</SubType>
@@ -95,8 +95,8 @@
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>CrystalReport2.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="frmEnCodeFile.resx">
+      <DependentUpon>frmEnCodeFile.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmQRCodeViewer.resx">
       <DependentUpon>frmQRCodeViewer.cs</DependentUpon>

@@ -9,6 +9,8 @@ namespace EncryptXSKT.HandleFile
     class ReadAndWriteCSV
     {
 
+        private System.Windows.Forms.ProgressBar progressBar;
+
      
         public List<LotteryPattern> ReadCSV(string urlFile, Boolean FileMaHoa)
         {
@@ -46,15 +48,22 @@ namespace EncryptXSKT.HandleFile
             }
             return listA;
         }
-
-        public void ReadAndWriteMaHoa(string urlFile, string urlFileMaHoa)
+        private void UpdateProgress()
         {
+
+            progressBar.Value += 1;
+
+        }
+        public delegate void updatebar();
+        public void ReadAndWriteMaHoa(System.Windows.Forms.ProgressBar progressBar,string urlFile, string urlFileMaHoa)
+        {
+            this.progressBar = progressBar;
             var reader = new StreamReader(File.OpenRead(urlFile));
             StreamWriter sw = new StreamWriter(urlFileMaHoa, true);
 
             List<LotteryPattern> listA = new List<LotteryPattern>();
             StringBuilder str = new StringBuilder();
-
+            
             while (!reader.EndOfStream)
             {
                 var line = reader.ReadLine();
@@ -69,6 +78,7 @@ namespace EncryptXSKT.HandleFile
                     obj.SoMaHoa = DecryptAndEcryptClass.Encrypt(obj.So, DecryptAndEcryptClass.GetConfigEncrytKey(), DecryptAndEcryptClass.IsHashEncryptDecryptEnable());
                     str.AppendFormat("{0} , {1} , {2} , {3}", obj.LoaiVe, obj.NgaySo, obj.So, obj.SoMaHoa);
                     str.AppendLine();
+
                 }
 
             }
@@ -94,11 +104,6 @@ namespace EncryptXSKT.HandleFile
             sw.Write(str.ToString());
             sw.Flush();
             sw.Close();
-        }
-
-        public void ReadAndWriteMaHoa()
-        {
-
         }
 
     }

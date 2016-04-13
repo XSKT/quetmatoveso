@@ -10,36 +10,21 @@ using EncryptXSKT.HandleFile;
 using System.IO;
 using BusinessRefinery.Barcode;
 using System.Drawing.Imaging;
+using System.Data.OleDb;
+using System.Threading;
 
 namespace EncryptXSKT
 {
-    public partial class Form1 : Form
+    public partial class frmEnCodeFile : Form
     {
-        public Form1()
+        public frmEnCodeFile()
         {
             InitializeComponent();
+            
             dlgFile.Multiselect = false;
             rwobj = new ReadAndWriteCSV();
-            //  TestDecrypt();
         }
         ReadAndWriteCSV rwobj;
-        //void TestDecrypt()
-        //{
-        //    string str = DecryptAndEcryptClass.Encrypt("811860", DecryptAndEcryptClass.GetConfigEncrytKey(), DecryptAndEcryptClass.IsHashEncryptDecryptEnable());
-        //    //string str = DecryptAndEcryptClass.Encrypt("811860"+"A"+"/05/07/2017" + DecryptAndEcryptClass.GetConfigEncrytKey(), DecryptAndEcryptClass.GetConfigEncrytKey(), DecryptAndEcryptClass.IsHashEncryptDecryptEnable());
-        //    MessageBox.Show(str);
-        //    string str1= DecryptAndEcryptClass.Decrypt(str,DecryptAndEcryptClass.GetConfigEncrytKey(),DecryptAndEcryptClass.IsHashEncryptDecryptEnable());
-
-        //    MessageBox.Show(str1);
-        //    MessageBox.Show(str1.Substring(0,6));
-
-        //}
-
-        //void ReadFile()
-        //{ 
-        //    if(dlgFile.
-
-        //}
 
         private void btnMoFile_Click(object sender, EventArgs e)
         {
@@ -61,12 +46,11 @@ namespace EncryptXSKT
         }
         void LuuFile()
         {
-            //List<LotteryPattern> lst = rwobj.ReadCSV(txtDuongDanFile.Text.ToString(),false);
-            //rwobj.WriteCSV(lst, lblduongdan.Text + "/" + txtFileMaHoa.Text);
             try
             {
-                rwobj.ReadAndWriteMaHoa(txtDuongDanFile.Text.ToString(), lblduongdan.Text + "/" + txtFileMaHoa.Text);
-
+                this.Enabled = true;
+                rwobj.ReadAndWriteMaHoa(pbCreateFile, txtDuongDanFile.Text.ToString(), lblduongdan.Text + "/" + txtFileMaHoa.Text);
+                this.Enabled = false;
             }
             catch (Exception ex)
             {
@@ -81,6 +65,7 @@ namespace EncryptXSKT
         {
             try
             {
+
                 LuuFile();
                 MessageBox.Show("File Mã Hóa lưu thành công !");
             }
@@ -101,6 +86,44 @@ namespace EncryptXSKT
             frmQRCodeViewer frm = new frmQRCodeViewer();
             frm.Show();
             this.Close();
+        }
+        private void UpdateProgress()
+        {
+
+            pbCreateFile.Value += 1;
+
+        }
+        public delegate void updatebar();
+
+        public void ReadFromExcel()
+        {
+            try
+            {
+                string fileLocation = txtDuongDanFile.Text;
+                string name = Path.GetFileName(txtDuongDanFile.Text);
+                DataTable sheet = new DataTable();
+                OleDbConnectionStringBuilder csbuilder = new OleDbConnectionStringBuilder();
+                csbuilder.Provider = "Microsoft.ACE.OLEDB.12.0";
+                csbuilder.DataSource= fileLocation.Substring(0, fileLocation.LastIndexOf('\\'));
+                csbuilder.Add("Extended Properties", "Text;Excel 12.0;HDR=No;IMEX=1;FMT=Delimited");
+                string selectSql = @"SELECT * FROM [" + name + "]";
+                using (OleDbConnection connection = new OleDbConnection(csbuilder.ConnectionString))
+                using (OleDbDataAdapter adapter = new OleDbDataAdapter(selectSql, connection))
+                {
+                    connection.Open();
+                    adapter.Fill(sheet);
+                    connection.Close();
+                }
+                foreach (DataRow row in sheet.Rows)
+                {
+
+                } 
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
     }
 }

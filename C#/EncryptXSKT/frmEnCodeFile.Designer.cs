@@ -1,6 +1,6 @@
 ﻿namespace EncryptXSKT
 {
-    partial class Form1
+    partial class frmEnCodeFile
     {
         /// <summary>
         /// Required designer variable.
@@ -32,7 +32,7 @@
             this.txtDuongDanFile = new System.Windows.Forms.TextBox();
             this.btnMoFile = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.pbCreateFile = new System.Windows.Forms.ProgressBar();
             this.label2 = new System.Windows.Forms.Label();
             this.btnFile = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
@@ -76,12 +76,14 @@
             this.label1.TabIndex = 3;
             this.label1.Text = "File Đầu Vào";
             // 
-            // progressBar1
+            // pbCreateFile
             // 
-            this.progressBar1.Location = new System.Drawing.Point(-3, 293);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(550, 23);
-            this.progressBar1.TabIndex = 4;
+            this.pbCreateFile.Location = new System.Drawing.Point(-1, 295);
+            this.pbCreateFile.Margin = new System.Windows.Forms.Padding(0);
+            this.pbCreateFile.Maximum = 911110;
+            this.pbCreateFile.Name = "pbCreateFile";
+            this.pbCreateFile.Size = new System.Drawing.Size(559, 23);
+            this.pbCreateFile.TabIndex = 4;
             // 
             // label2
             // 
@@ -154,24 +156,26 @@
             this.label4.Text = ">>>>>>";
             this.label4.Click += new System.EventHandler(this.label4_Click);
             // 
-            // Form1
+            // frmEnCodeFile
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(550, 317);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.lblduongdan);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.progressBar1);
+            this.Controls.Add(this.pbCreateFile);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.btnFile);
             this.Controls.Add(this.btnMoFile);
             this.Controls.Add(this.txtFileMaHoa);
             this.Controls.Add(this.txtDuongDanFile);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Name = "frmEnCodeFile";
+            this.Text = "Mã Hóa File";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -183,7 +187,7 @@
         private System.Windows.Forms.TextBox txtDuongDanFile;
         private System.Windows.Forms.Button btnMoFile;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.ProgressBar pbCreateFile;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnFile;
         private System.Windows.Forms.Button button3;
