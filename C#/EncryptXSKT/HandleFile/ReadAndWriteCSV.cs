@@ -74,11 +74,12 @@ namespace EncryptXSKT.HandleFile
                 if (values.Count() > 0)
                 {
                     obj.LoaiVe = values[0].ToString();
-                    obj.NgaySo = values[1].ToString();
-                    obj.So = values[2].ToString();
-                    encodeString = obj.LoaiVe + notesString + obj.NgaySo + notesString + obj.So;
+                    obj.KyVe = values[1].ToString();
+                    obj.NgaySo = values[2].ToString();
+                    obj.So = values[3].ToString();
+                    encodeString = obj.LoaiVe + notesString + obj.KyVe + notesString + obj.NgaySo + notesString + obj.So;
                     obj.SoMaHoa = DecryptAndEcryptClass.Encrypt(encodeString, DecryptAndEcryptClass.GetConfigEncrytKey(), DecryptAndEcryptClass.IsHashEncryptDecryptEnable());
-                    str.AppendFormat("{0} , {1} , {2} , {3}", obj.LoaiVe, obj.NgaySo, obj.So, obj.SoMaHoa);
+                    str.AppendFormat("{0} , {1} , {2} , {3}, {4}", obj.LoaiVe, obj.KyVe, obj.NgaySo, obj.So, obj.SoMaHoa);
                     str.AppendLine();
                     this.progressBar.Invoke(new updatebar(this.UpdateProgress));
                 }
