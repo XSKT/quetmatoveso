@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Security.Cryptography;
+using System.Configuration;
 
 namespace EncryptXSKT.HandleFile
 {
@@ -89,7 +90,8 @@ namespace EncryptXSKT.HandleFile
 
         public static string GetConfigEncrytKey()
         {
-            return "P@nda1";
+            return ConfigurationSettings.AppSettings["KeyEncode"];
+           // return "P@nda1";
         }
 
         public static bool IsHashEncryptDecryptEnable()
