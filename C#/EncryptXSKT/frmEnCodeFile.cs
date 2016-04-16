@@ -12,6 +12,7 @@ using BusinessRefinery.Barcode;
 using System.Drawing.Imaging;
 using System.Data.OleDb;
 using System.Threading;
+using ZXing;
 
 namespace EncryptXSKT
 {
@@ -48,9 +49,9 @@ namespace EncryptXSKT
         {
             try
             {
-                this.Enabled = true;
-                rwobj.ReadAndWriteMaHoa(pbCreateFile, txtDuongDanFile.Text.ToString(), lblduongdan.Text + "/" + txtFileMaHoa.Text);
-                this.Enabled = false;
+                string namefileoutput= lblduongdan.Text + "/" + txtFileMaHoa.Text+".csv";
+                rwobj.ReadAndWriteMaHoa(pbCreateFile, txtDuongDanFile.Text.ToString(), namefileoutput);
+              
             }
             catch (Exception ex)
             {
@@ -65,7 +66,6 @@ namespace EncryptXSKT
         {
             try
             {
-
                 LuuFile();
                 MessageBox.Show("File Mã Hóa lưu thành công !");
             }
@@ -83,9 +83,9 @@ namespace EncryptXSKT
 
         private void label4_Click(object sender, EventArgs e)
         {
-            frmQRCodeViewer frm = new frmQRCodeViewer();
-            frm.Show();
-            this.Close();
+             frmQRCodeViewer frm = new frmQRCodeViewer();
+             this.Hide();
+             frm.Show();
         }
         private void UpdateProgress()
         {
@@ -93,37 +93,10 @@ namespace EncryptXSKT
             pbCreateFile.Value += 1;
 
         }
-        public delegate void updatebar();
 
-        public void ReadFromExcel()
+        private void btClose_Click(object sender, EventArgs e)
         {
-            try
-            {
-                string fileLocation = txtDuongDanFile.Text;
-                string name = Path.GetFileName(txtDuongDanFile.Text);
-                DataTable sheet = new DataTable();
-                OleDbConnectionStringBuilder csbuilder = new OleDbConnectionStringBuilder();
-                csbuilder.Provider = "Microsoft.ACE.OLEDB.12.0";
-                csbuilder.DataSource= fileLocation.Substring(0, fileLocation.LastIndexOf('\\'));
-                csbuilder.Add("Extended Properties", "Text;Excel 12.0;HDR=No;IMEX=1;FMT=Delimited");
-                string selectSql = @"SELECT * FROM [" + name + "]";
-                using (OleDbConnection connection = new OleDbConnection(csbuilder.ConnectionString))
-                using (OleDbDataAdapter adapter = new OleDbDataAdapter(selectSql, connection))
-                {
-                    connection.Open();
-                    adapter.Fill(sheet);
-                    connection.Close();
-                }
-                foreach (DataRow row in sheet.Rows)
-                {
-
-                } 
-
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            this.Close();
         }
     }
 }

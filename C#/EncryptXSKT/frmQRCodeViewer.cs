@@ -11,6 +11,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using EncryptXSKT.HandleFile;
 using CrystalDecisions.CrystalReports.Engine;
+using System.Data.OleDb;
 
 
 namespace EncryptXSKT
@@ -21,6 +22,13 @@ namespace EncryptXSKT
         {
             InitializeComponent();
             rwcs = new ReadAndWriteCSV();
+            LoadData();
+        }
+        void LoadData()
+        {
+            
+            //crystalReportViewer.SetDataSource();
+            //crystalReportViewer.ReportSource = tab;
         }
         ReadAndWriteCSV rwcs;
         private void frmQRCodeViewer_Load(object sender, EventArgs e)
@@ -33,7 +41,23 @@ namespace EncryptXSKT
         { 
         
         }
-
+        DataSet TableVeSo()
+        {
+            DataSet ds = new DataSet();
+            ds.Tables.Add();
+            ds.Tables.Clear();
+            ds.Tables.Add();
+            ds.Tables[0].Columns.Add("No");
+            ds.Tables[0].Columns.Add("NgayXo");
+            ds.Tables[0].Columns.Add("So");
+            ds.Tables[0].Columns.Add("MaHoa");
+            ds.Tables[0].Columns.Add("KyVe");
+            ds.Tables[0].Columns.Add("RQCodeLeft", typeof(byte[]));
+            ds.Tables[0].Columns.Add("RQCodebottom",typeof(byte[]));
+            ds.Tables[0].Columns.Add("RQCodeBlock", typeof(byte[]));
+            ds.Tables[0].Columns.Add("LoaiVe");
+            return ds;
+        }
 
         void loadReportQrCode()
         {
@@ -48,7 +72,7 @@ namespace EncryptXSKT
             ds.Tables[0].Columns.Add("So");
             ds.Tables[0].Columns.Add("MaHoa");
             Object[] pr = new Object[4];
-            List<LotteryPattern> lst = rwcs.ReadCSV(txtDuongDan.Text, true);
+            List<LotteryPattern> lst = rwcs.ReadCSV(txtDuongDanFile.Text, true);
             if (lst.Count > 0)
             {
                 foreach (var obj in lst)
@@ -66,7 +90,7 @@ namespace EncryptXSKT
 
             rpt.Load(Application.StartupPath + @"\CrystalReport2.rpt");
             rpt.SetDataSource(ds.Tables[0]);
-            crystalReportViewer1.ReportSource = rpt;
+            crystalReportViewer.ReportSource = rpt;
         }
 
         byte[] QrCodeByte(string mahoa)
@@ -93,7 +117,86 @@ namespace EncryptXSKT
             loadReportQrCode();
         }
 
-
+        private void btOpenFile_Click(object sender, EventArgs e)
+        {
+            DialogResult dr = dlopenFile.ShowDialog();
+            if (dr == DialogResult.OK)
+            {
+                if (dlopenFile.FileName.Contains(".csv"))
+                {
+                    txtDuongDanFile.Text = dlopenFile.FileName;
+                    //lblduongdan.Text = Path.GetDirectoryName(txtDuongDan.Text);
+                    ReadFromExcel(txtDuongDanFile.Text);
+                }
+                else
+                {
+                    // txtDuongDanFile.Text = "";
+                    MessageBox.Show("File Không Đúng Định Dạng ! Bạn hãy chọn file Khác");
+                }
+            }
+        }
+        public void ReadFromExcel(string namefile)
+        {
+            try
+            {
+                QRcode qrcode = new QRcode();
+                string fileLocation = txtDuongDanFile.Text;
+                string name = Path.GetFileName(txtDuongDanFile.Text);
+                DataTable sheet = new DataTable();
+                OleDbConnectionStringBuilder csbuilder = new OleDbConnectionStringBuilder();
+                csbuilder.Provider = "Microsoft.ACE.OLEDB.12.0";
+                csbuilder.DataSource = fileLocation.Substring(0, fileLocation.LastIndexOf('\\'));
+                csbuilder.Add("Extended Properties", "Text;Excel 12.0;HDR=No;IMEX=1;FMT=Delimited");
+                string selectSql = @"SELECT * FROM [" + name + "]";
+                using (OleDbConnection connection = new OleDbConnection(csbuilder.ConnectionString))
+                using (OleDbDataAdapter adapter = new OleDbDataAdapter(selectSql, connection))
+                {
+                    connection.Open();
+                    adapter.Fill(sheet);
+                    connection.Close();
+                }
+                DataSet ds = TableVeSo();
+                Decimal No = 1;
+                foreach (DataRow row in sheet.Rows)
+                {
+                    LotteryPattern lotteryPattern = new LotteryPattern();
+                    lotteryPattern.NO = No.ToString();
+                    if (row[0] != null)
+                    {
+                        lotteryPattern.LoaiVe = row[0].ToString();
+                    }
+                    if (row[1] != null)
+                    {
+                        lotteryPattern.KyVe = row[1].ToString();
+                    }
+                    if (row[2] != null)
+                    {
+                        lotteryPattern.NgaySo = string.Format("{0:MM-dd-yyyy}",row[2].ToString());
+                    }
+                    if (row[3] != null)
+                    {
+                        lotteryPattern.So = row[3].ToString();
+                    }
+                    if (row[4] != null)
+                    {
+                        lotteryPattern.SoMaHoa = row[4].ToString();
+                    }
+                    byte[] qrcodebyte = qrcode.ConertArrayByte(qrcode.GenerateQRCode(lotteryPattern.SoMaHoa,60, 60));
+                    ds.Tables[0].Rows.Add(lotteryPattern.NO, lotteryPattern.NgaySo, lotteryPattern.So, lotteryPattern.SoMaHoa, lotteryPattern.KyVe,qrcodebyte , qrcodebyte, qrcodebyte, lotteryPattern.LoaiVe);
+                    No++;
+                }
+                ReportDocument rpt = new ReportDocument();
+                
+                rpt.Load(Application.StartupPath + @"\CrystalReport2.rpt");
+                //rpt.SetDataSource(ds.Tables[0]);
+                rpt.Database.Tables["DataTable1"].SetDataSource(ds.Tables[0]);
+                crystalReportViewer.ReportSource = rpt;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
        
     }
 }

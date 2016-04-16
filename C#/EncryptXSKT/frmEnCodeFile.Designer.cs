@@ -35,7 +35,7 @@
             this.pbCreateFile = new System.Windows.Forms.ProgressBar();
             this.label2 = new System.Windows.Forms.Label();
             this.btnFile = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.btClose = new System.Windows.Forms.Button();
             this.txtFileMaHoa = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.lblduongdan = new System.Windows.Forms.Label();
@@ -80,7 +80,6 @@
             // 
             this.pbCreateFile.Location = new System.Drawing.Point(-1, 295);
             this.pbCreateFile.Margin = new System.Windows.Forms.Padding(0);
-            this.pbCreateFile.Maximum = 911110;
             this.pbCreateFile.Name = "pbCreateFile";
             this.pbCreateFile.Size = new System.Drawing.Size(559, 23);
             this.pbCreateFile.TabIndex = 4;
@@ -106,15 +105,16 @@
             this.btnFile.UseVisualStyleBackColor = true;
             this.btnFile.Click += new System.EventHandler(this.btnFile_Click);
             // 
-            // button3
+            // btClose
             // 
-            this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button3.Location = new System.Drawing.Point(313, 181);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(66, 23);
-            this.button3.TabIndex = 2;
-            this.button3.Text = "Thoát ";
-            this.button3.UseVisualStyleBackColor = true;
+            this.btClose.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btClose.Location = new System.Drawing.Point(313, 181);
+            this.btClose.Name = "btClose";
+            this.btClose.Size = new System.Drawing.Size(66, 23);
+            this.btClose.TabIndex = 2;
+            this.btClose.Text = "Thoát ";
+            this.btClose.UseVisualStyleBackColor = true;
+            this.btClose.Click += new System.EventHandler(this.btClose_Click);
             // 
             // txtFileMaHoa
             // 
@@ -168,7 +168,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.pbCreateFile);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.button3);
+            this.Controls.Add(this.btClose);
             this.Controls.Add(this.btnFile);
             this.Controls.Add(this.btnMoFile);
             this.Controls.Add(this.txtFileMaHoa);
@@ -190,7 +190,7 @@
         private System.Windows.Forms.ProgressBar pbCreateFile;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnFile;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button btClose;
         private System.Windows.Forms.TextBox txtFileMaHoa;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label lblduongdan;
