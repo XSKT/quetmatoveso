@@ -12,6 +12,7 @@ using System.IO;
 using EncryptXSKT.HandleFile;
 using CrystalDecisions.CrystalReports.Engine;
 using System.Data.OleDb;
+using System.Globalization;
 
 
 namespace EncryptXSKT
@@ -48,7 +49,7 @@ namespace EncryptXSKT
             ds.Tables.Clear();
             ds.Tables.Add();
             ds.Tables[0].Columns.Add("No");
-            ds.Tables[0].Columns.Add("NgayXo");
+            ds.Tables[0].Columns.Add("NgayXo",typeof(DateTime));
             ds.Tables[0].Columns.Add("So");
             ds.Tables[0].Columns.Add("MaHoa");
             ds.Tables[0].Columns.Add("KyVe");
@@ -114,7 +115,7 @@ namespace EncryptXSKT
 
         private void button2_Click(object sender, EventArgs e)
         {
-            loadReportQrCode();
+            LoadRQCodeinReport(txtDuongDanFile.Text);
         }
 
         private void btOpenFile_Click(object sender, EventArgs e)
@@ -126,7 +127,7 @@ namespace EncryptXSKT
                 {
                     txtDuongDanFile.Text = dlopenFile.FileName;
                     //lblduongdan.Text = Path.GetDirectoryName(txtDuongDan.Text);
-                    ReadFromExcel(txtDuongDanFile.Text);
+                    LoadDatainReport(txtDuongDanFile.Text);
                 }
                 else
                 {
@@ -135,11 +136,47 @@ namespace EncryptXSKT
                 }
             }
         }
-        public void ReadFromExcel(string namefile)
+        public void LoadRQCodeinReport(string namefile)
+        {
+            try
+            {
+                DataTable sheet = new DataTable();
+                sheet = ReadFromExcels(namefile);
+                ReportDocument rpt = new ReportDocument();
+                rpt.Load(Application.StartupPath + @"\CrystalReport2.rpt");
+                //rpt.SetDataSource(ds.Tables[0]);
+                rpt.Database.Tables["DataTable1"].SetDataSource(sheet);
+                crystalReportViewer.ReportSource = rpt;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+        public void LoadDatainReport(string namefile)
+        {
+            try
+            {
+                DataTable sheet = new DataTable();
+                sheet = ReadFromExcels(namefile);
+                ReportDocument rpt = new ReportDocument();
+                rpt.Load(Application.StartupPath + @"\CrystalReport3.rpt");
+                //rpt.SetDataSource(ds.Tables[0]);
+                rpt.Database.Tables["DataTableBlockVeSo"].SetDataSource(sheet);
+                crystalReportViewer.ReportSource = rpt;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+        public DataTable ReadFromExcels(string namefile)
         {
             try
             {
                 QRcode qrcode = new QRcode();
+                string format = "dd-MM-yyyy";
+                CultureInfo provider = CultureInfo.InvariantCulture;
                 string fileLocation = txtDuongDanFile.Text;
                 string name = Path.GetFileName(txtDuongDanFile.Text);
                 DataTable sheet = new DataTable();
@@ -171,7 +208,7 @@ namespace EncryptXSKT
                     }
                     if (row[2] != null)
                     {
-                        lotteryPattern.NgaySo = string.Format("{0:MM-dd-yyyy}",row[2].ToString());
+                        lotteryPattern.NgaySo = DateTime.ParseExact(row[2].ToString().Substring(0, 10), format, provider);
                     }
                     if (row[3] != null)
                     {
@@ -181,21 +218,19 @@ namespace EncryptXSKT
                     {
                         lotteryPattern.SoMaHoa = row[4].ToString();
                     }
-                    byte[] qrcodebyte = qrcode.ConertArrayByte(qrcode.GenerateQRCode(lotteryPattern.SoMaHoa,60, 60));
-                    ds.Tables[0].Rows.Add(lotteryPattern.NO, lotteryPattern.NgaySo, lotteryPattern.So, lotteryPattern.SoMaHoa, lotteryPattern.KyVe,qrcodebyte , qrcodebyte, qrcodebyte, lotteryPattern.LoaiVe);
+                    byte[] qrcodebyte = qrcode.ConertArrayByte(qrcode.GenerateQRCode(lotteryPattern.SoMaHoa, 70, 70));
+                    byte[] qrcodebytebottom = qrcode.ConertArrayByte(qrcode.GenerateQRCode(lotteryPattern.SoMaHoa, 40, 40));
+                    ds.Tables[0].Rows.Add(lotteryPattern.NO, lotteryPattern.NgaySo, lotteryPattern.So, lotteryPattern.SoMaHoa, lotteryPattern.KyVe, qrcodebyte, qrcodebytebottom, qrcodebyte, lotteryPattern.LoaiVe);
                     No++;
                 }
-                ReportDocument rpt = new ReportDocument();
-                
-                rpt.Load(Application.StartupPath + @"\CrystalReport2.rpt");
-                //rpt.SetDataSource(ds.Tables[0]);
-                rpt.Database.Tables["DataTable1"].SetDataSource(ds.Tables[0]);
-                crystalReportViewer.ReportSource = rpt;
+                return ds.Tables[0];
             }
             catch (Exception e)
-            {
+            { 
                 Console.WriteLine(e.Message);
+                return null;
             }
+        
         }
        
     }

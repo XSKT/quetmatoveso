@@ -83,7 +83,6 @@
             // 
             // GeQRCode
             // 
-            this.GeQRCode.Enabled = false;
             this.GeQRCode.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.GeQRCode.Location = new System.Drawing.Point(539, 67);
             this.GeQRCode.Name = "GeQRCode";

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Configuration;
 
 namespace EncryptXSKT.HandleFile
 {
@@ -27,7 +28,7 @@ namespace EncryptXSKT.HandleFile
                     if (values.Count() > 0)
                     {
                         obj.LoaiVe = values[0].ToString();
-                        obj.NgaySo = values[1].ToString();
+                       // obj.NgaySo = values[1].ToString();
                         obj.So = values[2].ToString();
                     }
                 }
@@ -36,7 +37,7 @@ namespace EncryptXSKT.HandleFile
                     if (values.Count() > 0)
                     {
                         obj.LoaiVe = values[0].ToString();
-                        obj.NgaySo = values[1].ToString();
+                       // obj.NgaySo = values[1].ToString();
                         obj.So = values[2].ToString();
                         obj.SoMaHoa = values[3].ToString();
                     }
@@ -75,7 +76,7 @@ namespace EncryptXSKT.HandleFile
                 {
                     obj.LoaiVe = values[0].ToString();
                     obj.KyVe = values[1].ToString();
-                    obj.NgaySo = values[2].ToString();
+                  //  obj.NgaySo = values[2].ToString();
                     obj.So = values[3].ToString();
                     encodeString = obj.LoaiVe + notesString + obj.KyVe + notesString + obj.NgaySo + notesString + obj.So;
                     obj.SoMaHoa = DecryptAndEcryptClass.Encrypt(encodeString, DecryptAndEcryptClass.GetConfigEncrytKey(), DecryptAndEcryptClass.IsHashEncryptDecryptEnable());
