@@ -14,6 +14,7 @@ namespace GeneralKey
         public frmGeneralKey()
         {
             InitializeComponent();
+            label4.Text = DateTime.Now.ToString("dd/MM/yyyy");
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -23,9 +24,34 @@ namespace GeneralKey
         HandelXml obj = new HandelXml();
         private void button1_Click(object sender, EventArgs e)
         {
+            pbCreateFile.Value = 0;
+            if (textBox2.Text.Trim().Equals(""))
+            {
+                MessageBox.Show("Độ dài key không được rỗng !");
+                return;
+            }
+
+            if (Convert.ToDouble(textBox2.Text.Trim()) <12 )
+            {
+                MessageBox.Show("Độ dài key không được nhỏ hơn 12 !");
+                return;
+            }
+
+            richTextBox1.Text = obj.RandomString(pbCreateFile, Convert.ToDouble(textBox2.Text), false);
+        }
 
 
-            textBox1.Text = obj.RandomString(false);
+        private void Data_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+        public delegate void updatebar();
+        private void UpdateProgress()
+        {
+            pbCreateFile.Value += 1;
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -36,7 +62,7 @@ namespace GeneralKey
             {
                 try
                 {
-                    obj.writeXML(textBox1.Text, Application.StartupPath + "/test.xml");
+                    obj.writeXML(richTextBox1.Text,label4.Text, Application.StartupPath + "/test.xml");
                     MessageBox.Show("Lưu key thành công !");
                 }
 
@@ -47,5 +73,12 @@ namespace GeneralKey
             }
             
         }
+
+        private void textBox2_Leave(object sender, EventArgs e)
+        {
+            pbCreateFile.Maximum = Convert.ToInt16(textBox2.Text.ToString());
+        }
+
+
     }
 }
