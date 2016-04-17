@@ -176,8 +176,6 @@ namespace EncryptXSKT
             try
             {
                 QRcode qrcode = new QRcode();
-                string format = "dd-MM-yyyy";
-                CultureInfo provider = CultureInfo.InvariantCulture;
                 string fileLocation = txtDuongDanFile.Text;
                 string name = Path.GetFileName(txtDuongDanFile.Text);
                 DataTable sheet = new DataTable();
@@ -209,7 +207,7 @@ namespace EncryptXSKT
                     }
                     if (row[2] != null)
                     {
-                        lotteryPattern.NgaySo = DateTime.ParseExact(row[2].ToString().Substring(0, 10), format, provider);
+                       lotteryPattern.NgaySo =Convert.ToDateTime(row[2].ToString());
                     }
                     if (row[3] != null)
                     {
