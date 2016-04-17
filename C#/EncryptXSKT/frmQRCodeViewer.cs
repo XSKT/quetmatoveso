@@ -164,6 +164,7 @@ namespace EncryptXSKT
                 //rpt.SetDataSource(ds.Tables[0]);
                 rpt.Database.Tables["DataTableBlockVeSo"].SetDataSource(sheet);
                 crystalReportViewer.ReportSource = rpt;
+                GeQRCode.Enabled = true;
             }
             catch (Exception e)
             {
